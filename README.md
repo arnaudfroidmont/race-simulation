@@ -1,4 +1,4 @@
-# race-simulation
+# Race Simulation
 
 This is an example on how to run MonteCarlo analysis for F1 race strategy. You can find out a lot more about the background [here](https://blogs.oracle.com/cloud-infrastructure/post/modernize-your-motor-sport-race-strategy-on-oracle-cloud-infrastructure) The actual simulation of the race is using the work found [here](https://github.com/TUMFTM/race-simulation)
 Running billions of race simulations can take a significant amount of time. This is why we wil use cloud native applications to parallelize this work in order to get the information faster. 
@@ -67,5 +67,7 @@ Run the next commands:
 
 ### Submit Initial Job
 
-Finally edit the client.py file. The scenario's are described at line 43 to 67. A3, A4 and A6 are the tire compounds available for this track. You can choose the initial compoud as well at the 
+Finally edit the client.py file. The scenario's are described at line 43 to 67. A3, A4 and A6 are the tire compounds available for this track. You can choose the initial compoud as well at the stops that you make. At which lap and what compound you need. Keep in mind that you need at least 2 different compounds per race. 
+
+For each scenario, we'll run no_sim_runs experiemnts, the default value is 500. Each worker will run 10 experiment at the time. So for each scenario, we'll post 50 messages and gather all the results and average them out. 
 
