@@ -5,7 +5,8 @@ import pandas as pd
 
 def mcs_analysis(race_results: list,
                  use_print_result: bool,
-                 use_plot: bool):
+                 use_plot: bool,
+                 mcs_driver: str ) :
     """
     author:
     Alexander Heilmeier
@@ -47,6 +48,7 @@ def mcs_analysis(race_results: list,
     race_results_df = pd.DataFrame(np.zeros((no_drivers, no_drivers), dtype=np.int32),
                                    columns=col_names,
                                    index=driver_initials)
+    return_value=-1.0
 
     # count number of positions for current driver
     for initials in driver_initials:
@@ -63,22 +65,28 @@ def mcs_analysis(race_results: list,
     # PRINT MEAN POSITIONS ---------------------------------------------------------------------------------------------
     # ------------------------------------------------------------------------------------------------------------------
 
-    if use_print_result:
-        print("RESULT: Mean positions after %i simulation runs..." % no_sim_runs)
+    if use_print_result or mcs_driver != '':
+        
         mean_posis = []
 
         for idx_driver in range(no_drivers):
+            
             no_pos = race_results_df.iloc[idx_driver].values
             mean_pos = np.sum(no_pos * np.arange(1, no_drivers + 1)) / no_sim_runs
 
             mean_posis.append([driver_initials[idx_driver], mean_pos])
+            if mcs_driver == driver_initials[idx_driver]:
+                return_value=mean_pos
 
         # sort list by mean position
         mean_posis.sort(key=lambda x: x[1])
 
         # print list
-        for entry in mean_posis:
-            print("RESULT: %s: %.1f" % (entry[0], entry[1]))
+        if use_print_result:
+            print("RESULT: Mean positions after %i simulation runs..." % no_sim_runs)
+            for entry in mean_posis:
+                print("RESULT: %s: %.1f" % (entry[0], entry[1]))
+
 
     # ------------------------------------------------------------------------------------------------------------------
     # PLOTTING ---------------------------------------------------------------------------------------------------------
@@ -120,7 +128,7 @@ def mcs_analysis(race_results: list,
 
         fig.suptitle("Distribution of final positions (%i simulated races)" % no_sim_runs)
         plt.show()
-
+    return return_value
 
 # testing --------------------------------------------------------------------------------------------------------------
 if __name__ == "__main__":

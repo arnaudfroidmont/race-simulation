@@ -3,7 +3,7 @@ import configparser
 import json
 
 
-def import_pars(use_print: bool, use_vse: bool, race_pars_file: str, mcs_pars_file: str) -> tuple:
+def import_pars(use_print: bool, use_vse: bool, race_pars_file: str, mcs_pars_file: str, overwrite_dict: dict ) -> tuple:
 
     repo_path = os.path.dirname(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
@@ -30,6 +30,13 @@ def import_pars(use_print: bool, use_vse: bool, race_pars_file: str, mcs_pars_fi
     pars_in["driver_pars"] = json.loads(parser.get('DRIVER_PARS', 'driver_pars'))
     pars_in["event_pars"] = json.loads(parser.get('EVENT_PARS', 'event_pars'))
     pars_in["vse_pars"] = json.loads(parser.get('VSE_PARS', 'vse_pars'))
+ 
+    #try:
+    if not overwrite_dict is None:
+        pars_in["vse_pars"]["vse_type"][overwrite_dict["driver"]]="real_strategy"
+        pars_in["vse_pars"]["real_strategy"][overwrite_dict["driver"]]=overwrite_dict["strategy"]
+    #except:
+    #    pass
 
     # check for required pit stop parameters ---------------------------------------------------------------------------
     if pars_in["track_pars"]["t_gap_overtake_vel"] is None:
